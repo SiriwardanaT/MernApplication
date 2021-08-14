@@ -22,6 +22,7 @@ app.use('/payment',paymentRouter)
 app.use('/booking',bookingRouter)
 
 
+
 //mongodb connection
 mongoose.connect(process.env.DB, {useNewUrlParser:true,useUnifiedTopology: true})
 .then(()=>{
