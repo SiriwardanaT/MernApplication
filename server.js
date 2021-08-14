@@ -33,7 +33,7 @@ mongoose.connect(process.env.DB, {useNewUrlParser:true,useUnifiedTopology: true}
 })
 
 //server connection
-const port = 3000
-app.listen(port,()=>{
-    console.log(`http://localhost/${port}`);
+
+app.listen(process.env.PORT || 5000,()=>{
+    console.log(`http://localhost/${process.env.PORT}`);
 })
