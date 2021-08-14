@@ -3,6 +3,8 @@ const app = http();
 const bodyparser = require('body-parser');
 const userRouter = require('./router/userRouter') 
 const roomRouter = require('./router/roomRoutes')
+const bookingRouter =require('./router/reservation')
+const paymentRouter = require('./router/payment')
 const mongoose = require('mongoose')
 const dotenv  = require('dotenv')
 dotenv.config();
@@ -16,16 +18,8 @@ app.use(bodyparser.urlencoded({
 //use router middleware
 app.use('/user',userRouter);
 app.use('/room',roomRouter);
-
-
-
-
-
-app.get('/',(req,res)=>{
-    console.log(req.body)
-})
-
-
+app.use('/payment',paymentRouter)
+app.use('/booking',bookingRouter)
 
 
 //mongodb connection
@@ -40,5 +34,5 @@ mongoose.connect(process.env.DB, {useNewUrlParser:true,useUnifiedTopology: true}
 //server connection
 const port = 3000
 app.listen(port,()=>{
-    console.log(`http://localhost/${PORT}`);
+    console.log(`http://localhost/${port}`);
 })

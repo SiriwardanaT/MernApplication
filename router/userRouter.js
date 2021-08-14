@@ -3,16 +3,36 @@ const userRouter = http.Router();
 const user = require('../modal/user')
 //crud apis
 
-//user information insert 
-userRouter.post('/adduser',(req,res)=>{
-      user.create(req.body).then((getUser)=>{
-          res.send(getUser)
+//user information insert api
+//http:localhost:4000/user/add
+userRouter.post('/add',(req,res)=>{
+
+      //check already user
+      //if already user form must fill auto
+      user.findOne({nic:req.body.nic}).then((Alreadyusers)=>{
+          if(Alreadyusers==null){
+            user.create(req.body).then((getUser)=>{
+                res.send(getUser)
+            }).catch((err)=>{
+                res.send("something went wrong!"+err)
+            })
+          }
+          else{
+              res.send("alread user")
+          }
+
       }).catch((err)=>{
-          res.send("something went wrong!"+err)
+          console.log(err)
+
       })
+
+
+
+     
 })
 
-//read
+//read all user api
+//http:localhost:4000/user
 userRouter.get('/',(req,res)=>{
      user.find().then((read_info)=>{
          res.send(read_info)
@@ -21,22 +41,20 @@ userRouter.get('/',(req,res)=>{
         res.send("someting went wront")
 
      })
-
-
 })
+//find user api
+//http:localhost:4000/user/3
+userRouter.get('/:nic',(req,res)=>{
+     user.findOne({nic:req.params.nic}).then((user)=>{
+         res.send(user)
 
-//unique user 
-userRouter.get('/:id',(req,res)=>{
-    user.findById(req.params.id).then((getuser)=>{
-            res.send(getuser)
-    }).catch((err)=>{
-        res.send(err)
-    })
+     }).catch((err)=>{
+         
+         res.status(404).json({"message":"user could find","availble":false})
+     })
 })
-
-
-
-//update
+//update user api
+//http:localhost:4000/user/4
 userRouter.put('/:id',(req,rep)=>{
     user.updateOne({_id:req.params.id},{$set:req.body}).then((updatedUser)=>{
         rep.send("user updated")
@@ -45,8 +63,8 @@ userRouter.put('/:id',(req,rep)=>{
     })
    
 })
-
 //delete
+//http:localhost:4000/user/4
 userRouter.delete('/:id',(req,res)=>{
     user.deleteOne({_id:req.params.id}).then((deleteUser)=>{
             res.send("user deleted")
